@@ -1,5 +1,6 @@
 # user-spring-security
 
+```
 [
 	{
 		"code": "DEAL",
@@ -10,6 +11,9 @@
 		"privilege": ["WRITE"]
 	}
 ]
+```
 
+```
 DEAL_READ
 DEAL/GLE_WRITE
+```
