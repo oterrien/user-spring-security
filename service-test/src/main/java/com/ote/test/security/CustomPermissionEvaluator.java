@@ -23,7 +23,6 @@ public class CustomPermissionEvaluator implements PermissionEvaluator {
     }
 
     private boolean hasPrivilege(Authentication auth, String perimeter, String permission) {
-
         return remoteUserRightProvider.doesUserOwnPrivilegeForApplicationOnPerimeter(auth.getName(), auth.getCredentials().toString(), perimeter, permission);
     }
 

@@ -9,6 +9,7 @@
     <modules>
         <module>user-service</module>
         <module>service-test</module>
+        <module>user-domain</module>
     </modules>
     <name>spring-auth-annotations Maven Webapp</name>
     <url>http://maven.apache.org</url>
