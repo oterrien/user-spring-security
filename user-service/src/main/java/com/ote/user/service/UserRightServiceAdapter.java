@@ -17,8 +17,7 @@ public class UserRightServiceAdapter implements IUserRightService {
 
     public final IUserRightService userRightService;
 
-    @Autowired
-    public UserRightServiceAdapter(IUserRightRepository userRightRepository) {
+    public UserRightServiceAdapter(@Autowired IUserRightRepository userRightRepository) {
         this.userRightService = UserRightServiceProvider.getInstance().getFactory().createService(userRightRepository);
     }
 

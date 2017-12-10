@@ -1,6 +1,7 @@
 package com.ote.user.security.remoteprovider;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -10,12 +11,16 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import java.math.BigInteger;
-import java.security.MessageDigest;
 import java.util.Collections;
 
 @Service
 public class RemoteAuthenticationProvider implements AuthenticationProvider {
+
+    @Value("${user-service.url}")
+    private String userServiceUrl;
+
+    @Value("${user-service.endpoints.credentials}")
+    private String userServiceCredentialsEndpoint;
 
     @Autowired
     private RestTemplate restTemplate;
@@ -25,30 +30,18 @@ public class RemoteAuthenticationProvider implements AuthenticationProvider {
         String username = auth.getName();
         String password = auth.getCredentials().toString();
 
-        String url = UriComponentsBuilder.fromHttpUrl("http://localhost:8081").
-                path("/api/v1/credentials").
+        String url = UriComponentsBuilder.fromHttpUrl(userServiceUrl).
+                path(userServiceCredentialsEndpoint).
                 queryParam("user", username).
-                queryParam("password", encryptPassword(password)).build().encode().toUriString();
+                queryParam("password", password).
+                build().encode().toUriString();
 
-        boolean areCredentialsCorrect = restTemplate.getForObject(url, Boolean.class);
+        boolean isPasswordCorrect = restTemplate.getForObject(url, UserCredentialPayload.class).isPasswordCorrect();
 
-        if (areCredentialsCorrect) {
+        if (isPasswordCorrect) {
             return new UsernamePasswordAuthenticationToken(username, password, Collections.emptyList());
         }
         throw new BadCredentialsException("External system authentication failed");
-    }
-
-    private static String encryptPassword(String password) {
-
-        try {
-            MessageDigest crypt = MessageDigest.getInstance("SHA-1");
-            crypt.reset();
-            crypt.update(password.getBytes("UTF-8"));
-
-            return new BigInteger(1, crypt.digest()).toString(16);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
     }
 
     @Override

@@ -1,14 +1,17 @@
 package com.ote.user.persistence.model;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 
 import javax.persistence.*;
-import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Data
-@Table(name = "T_USER_RIGHT")
+@Getter
+@Setter
+@ToString(of = {"user", "application", "perimeters"})
+@Table(name = "T_USER_RIGHT", uniqueConstraints = @UniqueConstraint(name="T_USER_RIGHT_AK", columnNames = {"USER_ID", "APPLICATION_ID"}))
 public class UserRightEntity {
 
     @Id
@@ -28,5 +31,5 @@ public class UserRightEntity {
     @JoinTable(name = "T_USER_RIGHT_PERIMETER",
             joinColumns = @JoinColumn(name = "USER_RIGHT_ID", referencedColumnName = "ID"),
             inverseJoinColumns = @JoinColumn(name = "PERIMETER_ID", referencedColumnName = "ID"))
-    private List<PerimeterEntity> perimeters = new ArrayList<>();
+    private List<PerimeterEntity> perimeters;
 }

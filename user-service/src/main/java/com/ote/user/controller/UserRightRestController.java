@@ -1,15 +1,12 @@
 package com.ote.user.controller;
 
-import com.ote.user.persistence.model.UserRightEntity;
-import com.ote.user.persistence.repository.IUserRightJpaRepository;
 import com.ote.user.rights.api.IUserRightService;
 import com.ote.user.rights.api.PerimeterPath;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/rights")
@@ -19,31 +16,19 @@ public class UserRightRestController {
     @Autowired
     private IUserRightService userRightService;
 
-    @GetMapping(value = "/isGranted")
+    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     @ResponseStatus(HttpStatus.OK)
-    public boolean doesUserOwnPrivilegeForApplicationOnPerimeter(@RequestParam("user") String user,
-                                                                 @RequestParam("application") String application,
-                                                                 @RequestParam("perimeter") String perimeter,
-                                                                 @RequestParam("privilege") String privilege) throws Exception {
+    public UserRightPayload doesUserOwnPrivilegeForApplicationOnPerimeter(@RequestParam("user") String user,
+                                                                          @RequestParam("application") String application,
+                                                                          @RequestParam("perimeter") String perimeter,
+                                                                          @RequestParam("privilege") String privilege) throws Exception {
 
-        log.debug(String.format("IsGranted?user=%s&application=%s&perimeter=%s&privilege=%s", user, application, perimeter, privilege));
+        log.debug(String.format("doesUserOwnPrivilegeForApplicationOnPerimeter? user=%s, application=%s, perimeter=%s, privilege=%s", user, application, perimeter, privilege));
 
-        PerimeterPath perimeterPath = new PerimeterPath.Parser(perimeter).parse();
-        return userRightService.doesUserOwnPrivilegeForApplicationOnPerimeter(user, application, perimeterPath, privilege);
+        PerimeterPath perimeterPath = new PerimeterPath.Parser(perimeter).get();
+        boolean isGranted = userRightService.doesUserOwnPrivilegeForApplicationOnPerimeter(user, application, perimeterPath, privilege);
+
+        return new UserRightPayload(user, application, perimeter, privilege, isGranted);
     }
-
-    //region TEMP
-    @Autowired
-    private IUserRightJpaRepository userRightJpaRepository;
-
-    @GetMapping
-    @ResponseBody
-    @ResponseStatus(HttpStatus.OK)
-    public List<UserRightEntity> getUserRights(@RequestParam("user") String user,
-                                               @RequestParam("application") String application) {
-        return userRightJpaRepository.findByUserAndApplication(user, application);
-    }
-    //endregion
-
 }

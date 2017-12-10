@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/v1/user-secured")
 public class UserRightRestController {
 
-    @PreAuthorize("hasPermission('DEAL', 'WRITE')")
+    @PreAuthorize("hasPermission('DEAL/GLE', 'READ_WRITE')")
     @GetMapping
     @ResponseBody
     @ResponseStatus(HttpStatus.OK)

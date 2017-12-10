@@ -1,4 +1,4 @@
-package com.ote.user.persistence;
+package com.ote.user.persistence.repository;
 
 import com.ote.user.persistence.model.PerimeterEntity;
 import com.ote.user.persistence.model.UserRightEntity;
@@ -53,13 +53,10 @@ public class UserRightPersistenceServiceAdapter implements IUserRightRepository 
     }
 
     private Perimeter convert(PerimeterEntity perimeterEntity) {
-
         Perimeter perimeter = new Perimeter(perimeterEntity.getCode());
-        perimeterEntity.getPrivileges().stream().
-                map(p -> p.getCode()).
-                forEach(p -> perimeter.getPrivileges().add(p));
+        perimeterEntity.getPrivileges().stream().map(p -> p.getCode()).forEach(p -> perimeter.getPrivileges().add(p));
+        perimeterEntity.getPerimeters().stream().map(p -> convert(p)).forEach(p -> perimeter.getPerimeters().add(p));
         return perimeter;
-
     }
 
 }

@@ -1,3 +1,9 @@
 server.port: 8080
 
-application.name: APPLE
+application.name: SLA
+
+user-service:
+  url: http://localhost:8081
+  endpoints:
+    credentials: /api/v1/credentials
+    rights: /api/v1/rights

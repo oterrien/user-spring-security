@@ -18,13 +18,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
 
         http.httpBasic();
-        http.authorizeRequests().antMatchers("/api/v1/credentials", "/h2/console/**").permitAll();
+        http.authorizeRequests().antMatchers("/api/v1/credentials**", "/api/v1/rights**").permitAll();
         http.authorizeRequests().anyRequest().fullyAuthenticated();
         http.csrf().disable();
     }
 
     @Override
-    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+    protected void configure(AuthenticationManagerBuilder auth) {
         auth.authenticationProvider(this.customAuthenticationProvider);
     }
 

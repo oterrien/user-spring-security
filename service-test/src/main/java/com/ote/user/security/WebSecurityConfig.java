@@ -17,15 +17,14 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.authorizeRequests().anyRequest().fullyAuthenticated();
         http.httpBasic();
+        http.authorizeRequests().anyRequest().fullyAuthenticated();
         http.csrf().disable();
     }
 
     @Override
-    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+    protected void configure(AuthenticationManagerBuilder auth) {
         auth.authenticationProvider(this.customAuthenticationProvider);
-        auth.eraseCredentials(false);
     }
 
 }

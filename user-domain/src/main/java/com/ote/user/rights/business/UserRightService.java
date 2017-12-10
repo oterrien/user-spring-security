@@ -73,6 +73,6 @@ class UserRightService implements IUserRightService {
     private void apply(Perimeter perimeter, List<String> privileges, List<Perimeter> perimetersToSearch) {
         privileges.addAll(perimeter.getPrivileges());
         perimetersToSearch.clear();
-        perimetersToSearch.addAll(perimeter.getChildren());
+        perimetersToSearch.addAll(perimeter.getPerimeters());
     }
 }

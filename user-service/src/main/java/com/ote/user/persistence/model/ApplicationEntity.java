@@ -1,14 +1,18 @@
 package com.ote.user.persistence.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 
 import javax.persistence.*;
 import java.util.List;
 
 @Entity
-@Data
-@Table(name = "T_APPLICATION")
+@Getter
+@Setter
+@ToString(of = "code")
+@Table(name = "T_APPLICATION", uniqueConstraints = @UniqueConstraint(name="T_APPLICATION_AK", columnNames = "CODE"))
 public class ApplicationEntity {
 
     @Id

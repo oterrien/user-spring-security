@@ -1,12 +1,17 @@
 package com.ote.user.persistence.model;
 
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 
 import javax.persistence.*;
 
 @Entity
-@Data
-@Table(name = "T_PRIVILEGE")
+@Getter
+@Setter
+@ToString(of = "code")
+@Table(name = "T_PRIVILEGE", uniqueConstraints = @UniqueConstraint(name="T_PRIVILEGE_AK", columnNames = "CODE"))
 public class PrivilegeEntity {
 
     @Id

@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
@@ -15,6 +16,10 @@ public final class PerimeterPath implements Iterable<String> {
 
     @Getter
     private final String[] path;
+
+    private PerimeterPath(List<String> path) {
+        this(path.toArray(new String[0]));
+    }
 
     @Override
     public String toString() {
@@ -26,7 +31,8 @@ public final class PerimeterPath implements Iterable<String> {
         return Arrays.stream(path).iterator();
     }
 
-    public static class Parser {
+    //region Parser
+    public static class Parser implements Supplier<PerimeterPath> {
 
         private final List<String> path = new ArrayList<>();
 
@@ -35,12 +41,14 @@ public final class PerimeterPath implements Iterable<String> {
             Arrays.stream(s).forEach(p -> path.add(p));
         }
 
-        public PerimeterPath parse() {
-            return new PerimeterPath(path.toArray(new String[0]));
+        public PerimeterPath get() {
+            return new PerimeterPath(path);
         }
     }
+    //endregion
 
-    public static class Builder {
+    //region Builder
+    public static class Builder implements Supplier<PerimeterPath> {
 
         private final List<String> path = new ArrayList<>();
 
@@ -53,8 +61,9 @@ public final class PerimeterPath implements Iterable<String> {
             return this;
         }
 
-        public PerimeterPath build() {
-            return new PerimeterPath(path.toArray(new String[0]));
+        public PerimeterPath get() {
+            return new PerimeterPath(path);
         }
     }
+    //endregion
 }
